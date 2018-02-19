@@ -49,6 +49,7 @@ float threshold = .5; // a treshold of .5°C around target temperature
 char currentTemp[16];
 char targetTemp[16];
 String automatic;
+String isHeating;
 float tempC;
 
 int heating=0;
@@ -86,6 +87,7 @@ void setup(){
   Particle.variable("currentTemp",currentTemp);
   Particle.variable("targetTemp",targetTemp);
   Particle.variable("automatic",automatic);
+  Particle.variable("Heating",isHeating);
   Particle.function("autoSwitch",switchToggle);
   Particle.function("overrideTemp",overrideTemp);
   //initialize control pins
@@ -99,6 +101,7 @@ void setup(){
 
   //starts in automatic mode
   automatic = "yes";
+  toggle_relay(0);
 
 }
 
@@ -106,12 +109,8 @@ void loop() {
   //check every delayIt(=15s), better than using delay()
   if (millis() - delayIt >= time_interval) {
     delayIt = millis();
-    //get temperature from sensor
-    tempC = getTemp();
-    //convert float to string for cloud variables
-    snprintf(currentTemp,sizeof(currentTemp),"%.2f",tempC);
 
-    //temperature is set via cloud function overrideTemp
+    //temperature is set via cloud function overrideTemp (manual=1)
     //or is read from EEPROM
     currQuarter = getCurrentQuarter();
     if (currQuarter!=prevQuarter){
@@ -121,24 +120,32 @@ void loop() {
         targetTemperature = getTempEeprom();
       }
     }
-    snprintf(targetTemp,sizeof(targetTemp),"%.2f",targetTemperature);
 
     //temperature control
+    //get temperature from sensor
+    tempC = getTemp();
     if (tempC > targetTemperature + threshold){
       //switch off
-      if (heating=1) {
-        toggle_relay(false);
+      if (heating==1) {
+        toggle_relay(0);
       }
     }
     else if (tempC < targetTemperature - threshold){
-      if (heating=1){
+      if (heating==1){
         //already heating
       }
       else {
-        toggle_relay(true);
+        toggle_relay(1);
       }
     }
-
+    //update cloud
+    snprintf(currentTemp,sizeof(currentTemp),"%.2f",tempC);
+    snprintf(targetTemp,sizeof(targetTemp),"%.2f",targetTemperature);
+    if (heating==1){
+      isHeating="yes";
+    } else {
+      isHeating="no";
+    }
   }
 }
 
@@ -297,12 +304,12 @@ int switchToggle(String command) {
     }
 }
 
-void toggle_relay (boolean relay_on) {
-  if (relay_on) {
+void toggle_relay (int relay_on) {
+  if (relay_on==1) {
     digitalWrite(startPin,HIGH);
     digitalWrite(onPin,HIGH);
     digitalWrite(offPin,LOW);
-    delay(50);
+    delay(150);
     digitalWrite(startPin, LOW);
     heating=1;
   }
@@ -310,7 +317,7 @@ void toggle_relay (boolean relay_on) {
     digitalWrite(startPin,HIGH);
     digitalWrite(onPin,LOW);
     digitalWrite(offPin,HIGH);
-    delay(50);
+    delay(150);
     digitalWrite(startPin, LOW);
     heating=0;
   }
