@@ -65,6 +65,7 @@ char currentTemp[16];
 char targetTemp[16];
 char humidity[16];
 char airQuality[16];
+char airPressure[16];
 String automatic;
 String isHeating;
 String tempCode;
@@ -139,7 +140,7 @@ void setup(){
 
     Particle.variable("currentTemp", currentTemp);
     Particle.variable("humidity", humidity);
-    Particle.variable("pressure", &pressureHpa, DOUBLE);
+    Particle.variable("airPressure", airPressure);
     Particle.variable("airQuality", airQuality);
     Particle.variable("altitude", &approxAltitudeInM, DOUBLE);
   }
@@ -219,6 +220,7 @@ void loop() {
     snprintf(targetTemp,sizeof(targetTemp),"%.1f",targetTemperature);
     snprintf(humidity,sizeof(humidity),"%.0f",relativeHumidity);
     snprintf(airQuality,sizeof(airQuality),"%.1f",gasResistanceKOhms);
+    snprintf(airPressure,sizeof(airPressure),"%.1f",pressureHpa);
 
     if (heating==1){
       isHeating="yes";
@@ -245,6 +247,7 @@ void loop() {
     }
     oled_targetTemp();  //indicator for target temperature
     oled_time();
+    oled_pressure();
     display.display();
   }
 }
@@ -478,4 +481,13 @@ void oled_time(){
   display.setTextColor(WHITE);
   display.setCursor(0,51);
   display.println(Time.format("%H:%M"));
+}
+
+void oled_pressure(){
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(65,57);
+  display.println(airPressure);
+  display.setCursor(104,57);
+  display.println("hPa");
 }
