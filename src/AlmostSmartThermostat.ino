@@ -113,8 +113,8 @@ const unsigned char manual_bmp [] = {
 };
 
 
-//manipulate for testing
-bool force_default(false);
+//manipulate for testing or loading new defaults
+bool force_default(true);
 bool force_clear(false);
 
 
@@ -293,7 +293,7 @@ void get_BME680_data(){
     Particle.publish("Log", "Failed to perform reading :(");
   }
   else {
-    temperatureInC = bme.temperature;
+    temperatureInC = bme.temperature - 2.5; //dirty hack awaiting proper calibration
     relativeHumidity = bme.humidity;
     pressureHpa = bme.pressure / 100.0;
     gasResistanceKOhms = bme.gas_resistance / 1000.0;
@@ -340,9 +340,9 @@ void factory_defaults(){
   defaultStorage.versionMain=0; // version 0.01
   defaultStorage.versionSub=1;
   defaultStorage.userdefined=0; // 0 is default ; > 0 is userdefined
-  defaultStorage.sunnyTemp=21.5;
-  defaultStorage.ecoTemp=18;
-  defaultStorage.nightTemp=7;
+  defaultStorage.sunnyTemp=22;
+  defaultStorage.ecoTemp=20;
+  defaultStorage.nightTemp=16;
   //Time is an illusion, lunchtime double so.
   time_t writeTime=Time.now();
   defaultStorage.updateTime = writeTime;
