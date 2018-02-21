@@ -16,6 +16,8 @@ A small 128x64 Oled display (SSD1306) is connect via software SPI and shows
   - Local time
   - Indicators for heating and desired temperature
 
+All credits to Adafruit (https://www.adafruit.com/) for the work on the drivers and the Particle community for porting them :)
+
 A default temperature table is stored in the simulated EEPROM of the Particle, this allows basic functionality without internet connection.
 The table design:
   - 7 days times 24 hours divided in periods of 15 minutes
