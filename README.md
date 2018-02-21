@@ -1,35 +1,40 @@
-# Home_Thermostat
+# AlmostSmartThermostat
 
-A Particle project named Home_Thermostat
+A home thermostat project based on the Particle Photon (https://www.particle.io/)
 
-## Welcome to your project!
+The sensor is a Bosch BME680 from Pimoroni (https://shop.pimoroni.com/products/bme680), communicating via the I2C-interface of the Photon.
 
-Every new Particle project is composed of 3 important elements that you'll see have been created in your project directory for Home_Thermostat.
+Sensor data available via the Particle cloud:
+  - Temperature (°C)
+  - Relative humidity
+  - Air Pressure (hPa)
+  - Air Quality (gas resistance expressed in kOhm, lower is worse)
+  - Altitude
 
-#### ```/src``` folder:  
-This is the source folder that contains the firmware files for your project. It should *not* be renamed. 
-Anything that is in this folder when you compile your project will be sent to our compile service and compiled into a firmware binary for the Particle device that you have targeted.
+A small 128x64 Oled display (SSD1306) is connect via software SPI and shows
+  - Temperature (°C), Air Pressure (hPa), Air Quality alternating every 15s
+  - Local time
+  - Indicators for heating and desired temperature
 
-If your application contains multiple files, they should all be included in the `src` folder. If your firmware depends on Particle libraries, those dependencies are specified in the `project.properties` file referenced below.
+A default temperature table is stored in the simulated EEPROM of the Particle, this allows basic functionality without internet connection.
+The table design:
+  - 7 days times 24 hours divided in periods of 15 minutes
+  - for each period there are 4 options represented by bit values
+    '00' undefined
+    '01' night temperature
+    '10' economy temperature
+    '11' sunny temperature
+    for a total of 168 bytes (small enough to fit 1 cloud variable)
 
-#### ```.ino``` file:
-This file is the firmware that will run as the primary application on your Particle device. It contains a `setup()` and `loop()` function, and can be written in Wiring or C/C++. For more information about using the Particle firmware API to create firmware for your Particle device, refer to the [Firmware Reference](https://docs.particle.io/reference/firmware/) section of the Particle documentation.
+It is the intention to create a management webinterface in the near future.
+At this moment there is only a temperature override function in the Particle console.
 
-#### ```project.properties``` file:  
-This is the file that specifies the name and version number of the libraries that your project depends on. Dependencies are added automatically to your `project.properties` file when you add a library to a project using the `particle library add` command in the CLI or add a library in the Desktop IDE.
+The logic sends signals to a L293DNE half-H driver, controlling a simple 3v/220v latching relay which switches the central heating on/off.
+Adapt this for your personal situation.
 
-## Adding additional files to your project
-
-#### Projects with multiple sources
-If you would like add additional files to your application, they should be added to the `/src` folder. All files in the `/src` folder will be sent to the Particle Cloud to produce a compiled binary.
-
-#### Projects with external libraries
-If your project includes a library that has not been registered in the Particle libraries system, you should create a new folder named `/lib/<libraryname>/src` under `/<project dir>` and add the `.h` and `.cpp` files for your library there. All contents of the `/lib` folder and subfolders will also be sent to the Cloud for compilation.
-
-## Compiling your project
-
-When you're ready to compile your project, make sure you have the correct Particle device target selected and run `particle compile <platform>` in the CLI or click the Compile button in the Desktop IDE. The following files in your project folder will be sent to the compile service:
-
-- Everything in the `/src` folder, including your `.ino` application file
-- The `project.properties` file for your project
-- Any libraries stored under `lib/<libraryname>/src`
+Future work
+- calibration
+- design PCB to evolve from the breadboard design
+- web interface
+- making the air quality 'human readable'
+- make a nice box to put everything in
