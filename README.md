@@ -1,6 +1,9 @@
 # AlmostSmartThermostat
 
-A home thermostat project based on the Particle Photon (https://www.particle.io/)
+A home thermostat project based on the Particle Photon (https://www.particle.io/).
+
+Notice: this thermostat simply switches the heating on/off and does not use OpenTherm to communicate with the heating/cooling applicance.
+If you wan to go the Opentherm route, http://ihormelnyk.com/page/arduino_opentherm_controller and https://github.com/sulicz/Arduino-OpenTherm are good places to start
 
 The sensor is a Bosch BME680 from Pimoroni (https://shop.pimoroni.com/products/bme680), communicating via the I2C-interface of the Photon.
 
@@ -33,6 +36,8 @@ At this moment there is only a temperature override function in the Particle con
 
 The logic sends signals to a L293DNE half-H driver, controlling a simple 3v/220v latching relay which switches the central heating on/off.
 Adapt this for your personal situation.
+
+An Eagle CAD schematic (and a Fritzing breadboard example) are available /doc 
 
 Future work
 - calibration

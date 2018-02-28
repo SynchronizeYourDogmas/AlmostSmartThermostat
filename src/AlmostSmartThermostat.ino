@@ -293,7 +293,7 @@ void get_BME680_data(){
     Particle.publish("Log", "Failed to perform reading :(");
   }
   else {
-    temperatureInC = bme.temperature - 2.5; //dirty hack awaiting proper calibration
+    temperatureInC = bme.temperature - 2; //dirty hack awaiting proper calibration
     relativeHumidity = bme.humidity;
     pressureHpa = bme.pressure / 100.0;
     gasResistanceKOhms = bme.gas_resistance / 1000.0;
