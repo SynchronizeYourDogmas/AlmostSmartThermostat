@@ -2,7 +2,7 @@
 
 A home thermostat project based on the Particle Photon (https://www.particle.io/).
 
-Notice: this thermostat simply switches the heating on/off and does not use OpenTherm to communicate with the heating/cooling applicance.
+Notice: this thermostat simply switches the heating on/off and does not use OpenTherm to communicate with the heating/cooling appliance.
 If you wan to go the Opentherm route, http://ihormelnyk.com/page/arduino_opentherm_controller and https://github.com/sulicz/Arduino-OpenTherm are good places to start
 
 The sensor is a Bosch BME680 from Pimoroni (https://shop.pimoroni.com/products/bme680), communicating via the I2C-interface of the Photon.
