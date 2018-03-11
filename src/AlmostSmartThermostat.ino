@@ -79,11 +79,12 @@ int prevQuarter=0;
 
 // OLED display 128*64
 // If using software SPI (the default case):
-#define OLED_MOSI   D5
-#define OLED_CLK    D6
-#define OLED_DC     D2
-#define OLED_CS     D3
-#define OLED_RESET  D4
+// will be changed in final PCB, see comment
+#define OLED_MOSI   D5 //=>D6
+#define OLED_CLK    D6 //=>D5
+#define OLED_DC     D2 //=>D4
+#define OLED_CS     D3 //=>D2
+#define OLED_RESET  D4 //=>D3
 Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
 //------------------------------------------------------------------------------
